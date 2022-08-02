@@ -4,8 +4,8 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.weatherapp.home.model.WeatherResponseModel
 import com.example.weatherapp.home.model.repository.HomeRepository
-import com.example.weatherapp.home.model.WeatherModel
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -13,14 +13,14 @@ import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel(application: Application): AndroidViewModel(application) {
     private val homeRepository: HomeRepository = HomeRepository()
-    val weatherModelLiveData: MutableLiveData<WeatherModel> = MutableLiveData()
+    val weatherModelLiveData: MutableLiveData<WeatherResponseModel> = MutableLiveData()
 
     fun fetchWeather(cityId: Int) {
         homeRepository.getWeatherByCityId(cityId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<WeatherModel> {
-                override fun onNext(weatherModel: WeatherModel) {
+            .subscribe(object : Observer<WeatherResponseModel> {
+                override fun onNext(weatherModel: WeatherResponseModel) {
                     weatherModelLiveData.value = weatherModel
                 }
                 override fun onError(e: Throwable) {

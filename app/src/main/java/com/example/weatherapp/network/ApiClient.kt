@@ -1,13 +1,12 @@
 package com.example.weatherapp.network
 
+import com.example.weatherapp.utils.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-
-const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
 class ApiClient {
 
@@ -21,7 +20,7 @@ class ApiClient {
 
     fun getApiClient(): ApiInterface {
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(getHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

@@ -1,8 +1,8 @@
 package com.example.weatherapp.home.model
 
-data class WeatherModel(
-    var coord: CoordModel,
-    var id: Int,
-    var name: String,
-    var main: TemperatureModel
-) {}
+class WeatherModel {
+    val id: Int = 0
+    val main: String = ""
+    val description: String = ""
+    val icon: String = ""
+}
