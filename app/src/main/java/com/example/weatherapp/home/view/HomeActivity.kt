@@ -26,14 +26,21 @@ class HomeActivity : AppCompatActivity() {
     private var tvStatus: TextView? = null
     private var tvNoData: TextView? = null
     private var llMainLayout: LinearLayout? = null
-    private val selectedCityModel: CityModel = getCities().get(0)
+    private var selectedCityModel: CityModel? = null
+    private val cityIndex: Int  = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         supportActionBar?.hide()
         setViewById()
-        loadWeather(selectedCityModel.id)
+
+        if(cityIndex < getCities().size) {
+            selectedCityModel = getCities().get(cityIndex)
+            selectedCityModel?.name?.let { loadWeather(it) }
+        } else {
+            displayNoData(getString(R.string.no_city_available))
+        }
     }
 
     fun setViewById() {
@@ -47,28 +54,33 @@ class HomeActivity : AppCompatActivity() {
         tvNoData = findViewById(R.id.tv_no_data)
     }
 
-    fun loadWeather(cityId: Int) {
+    fun loadWeather(cityName: String) {
         var homeViewModel: HomeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        homeViewModel.fetchWeather(cityId)
+        homeViewModel.fetchWeather(cityName)
 
         homeViewModel!!.weatherModelLiveData.observe(this, androidx.lifecycle.Observer {
             if(it != null) {
                 val weatherResponse = it as WeatherResponseModel
                 printData(weatherResponse)
             } else {
-                llMainLayout?.visibility = View.GONE
-                tvNoData?.visibility = View.VISIBLE
-                showToast("Something went wrong")
+                displayNoData(getString(R.string.something_went_wrong))
             }
-            progressBar?.visibility = View.GONE
         })
+    }
+
+    private fun displayNoData(message: String) {
+        progressBar?.visibility = View.GONE
+        llMainLayout?.visibility = View.GONE
+        tvNoData?.visibility = View.VISIBLE
+        showToast(message)
     }
 
     fun printData(weatherResponse: WeatherResponseModel) {
         llMainLayout?.visibility = View.VISIBLE
+        progressBar?.visibility = View.GONE
         tvNoData?.visibility = View.GONE
 
-        tvCity?.setText(selectedCityModel.name)
+        tvCity?.setText(selectedCityModel?.name)
         tvTemp?.setText(
             getTemperatureInCelsius(weatherResponse.main.temp) + "°")
         tvMinTemp?.setText("L: " + getTemperatureInCelsius(weatherResponse.main.temp_min) + "°")

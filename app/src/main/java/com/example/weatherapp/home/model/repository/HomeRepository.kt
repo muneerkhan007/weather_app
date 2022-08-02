@@ -10,7 +10,7 @@ const val TAG = "HomeRepository"
 class HomeRepository {
     val apiClient = ApiClient.getInstance()
 
-    fun getWeatherByCityId(cityId: Int): Observable<WeatherResponseModel> {
-        return apiClient.getApiClient().getWeatherByCityId(cityId, Constants.APP_ID)
+    fun getWeatherByCityName(cityName: String): Observable<WeatherResponseModel> {
+        return apiClient.getApiClient().getWeatherByCityName(cityName, Constants.APP_ID)
     }
 }

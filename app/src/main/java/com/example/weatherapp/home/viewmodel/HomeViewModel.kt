@@ -15,8 +15,8 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
     private val homeRepository: HomeRepository = HomeRepository()
     val weatherModelLiveData: MutableLiveData<WeatherResponseModel> = MutableLiveData()
 
-    fun fetchWeather(cityId: Int) {
-        homeRepository.getWeatherByCityId(cityId)
+    fun fetchWeather(cityName: String) {
+        homeRepository.getWeatherByCityName(cityName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<WeatherResponseModel> {
